@@ -128,7 +128,7 @@ export default function usePaypalExpress({ paymentMethodCode }) {
         'createPaypalExpressToken.paypal_urls.start'
       );
       if (!paypalExpressUrl) {
-        setErrorMessage('Paypal Error');
+        setErrorMessage(__('Paypal Error'));
         return;
       }
 

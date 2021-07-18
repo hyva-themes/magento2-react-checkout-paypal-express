@@ -1,5 +1,5 @@
 import { SET_PAYMENT_METHOD_ON_CART_PAYPAL_EXPRESS } from './mutation';
-import sendRequest from '../../../../../api/sendRequest';
+import sendRequest from '../sendRequest';
 import LocalStorage from '../../../../../utils/localStorage';
 import modifier from './modifier';
 

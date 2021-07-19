@@ -10,7 +10,7 @@ export function performRedirect(order) {
   const orderNumber = _get(order, 'order_number');
 
   if (orderNumber && config.isProductionMode) {
-    window.location.replace(`${config.baseUrl}/payone/onepage/redirect/`);
+    window.location.replace(`${config.baseUrl}/checkout/onepage/success/`);
   }
 
   if (orderNumber) {

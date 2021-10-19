@@ -7,7 +7,6 @@ import createCustomerToken from '../api/createCustomerToken';
 import setPaymentMethodPaypalExpress from '../api/setPaymentMethod';
 import { placeOrderRequest } from '../../../../api';
 import { performRedirect } from '../../../payone/src/utility';
-import LocalStorage from "../../../../utils/localStorage";
 
 /*
  Utility to get the token and the payer id from the URL
@@ -29,10 +28,7 @@ export default function usePaypalExpress({ paymentMethodCode }) {
   const query = window.location.search;
   const selectedShippingMethodCode = _get(selectedShippingMethod, 'methodCode');
   const selectedPaymentMethodCode = _get(selectedPaymentMethod, 'code');
-
-  LocalStorage.saveIsExternalShippingAddress(true);
-  LocalStorage.saveIsExternalBillingAddress(true);
-
+  
   /*
    Check if is possible to proceed on placing the order.
    */

@@ -4,6 +4,8 @@ import _get from 'lodash.get';
 import RadioInput from '../../../../components/common/Form/RadioInput';
 import usePaypalExpress from '../hooks/usePaypalExpress';
 import useCheckoutFormContext from '../../../../hook/useCheckoutFormContext';
+import usePaymentMethodCartContext from "../../../../components/paymentMethod/hooks/usePaymentMethodCartContext";
+import usePaymentMethodAppContext from "../../../../components/paymentMethod/hooks/usePaymentMethodAppContext";
 
 function PaypalExpress({ method, selected, actions }) {
   const methodCode = _get(method, 'code');
@@ -12,11 +14,16 @@ function PaypalExpress({ method, selected, actions }) {
     placePaypalExpressOrder,
     processPaymentEnable,
   } = usePaypalExpress({ paymentMethodCode: methodCode });
+  const {
+    setPaymentMethod,
+    selectedPaymentMethod,
+  } = usePaymentMethodCartContext();
+  const { setPageLoader } = usePaymentMethodAppContext();
   const { registerPaymentAction } = useCheckoutFormContext();
   const isSelected = methodCode === selected.code;
 
   useEffect(() => {
-    registerPaymentAction(methodCode, authorizeUser);
+      registerPaymentAction(methodCode, authorizeUser);
   }, [authorizeUser, registerPaymentAction, methodCode]);
 
   useEffect(() => {
@@ -24,6 +31,22 @@ function PaypalExpress({ method, selected, actions }) {
       placePaypalExpressOrder();
     }
   }, [placePaypalExpressOrder, processPaymentEnable]);
+
+  useEffect(() => {
+   if (isSelected && selectedPaymentMethod.code !== methodCode) {
+    (async () => {
+      setPageLoader(true);
+      await setPaymentMethod(methodCode);
+      setPageLoader(false);
+     })();
+   }
+  }, [
+    isSelected,
+    setPaymentMethod,
+    methodCode,
+    selectedPaymentMethod,
+    setPageLoader,
+  ]);
 
   return (
     <div className="w-full">

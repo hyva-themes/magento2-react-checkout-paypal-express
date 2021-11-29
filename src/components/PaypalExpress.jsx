@@ -4,42 +4,34 @@ import _get from 'lodash.get';
 import RadioInput from '../../../../components/common/Form/RadioInput';
 import usePaypalExpress from '../hooks/usePaypalExpress';
 import useCheckoutFormContext from '../../../../hook/useCheckoutFormContext';
-import usePaymentMethodCartContext from "../../../../components/paymentMethod/hooks/usePaymentMethodCartContext";
-import usePaymentMethodAppContext from "../../../../components/paymentMethod/hooks/usePaymentMethodAppContext";
+import usePaymentMethodCartContext from '../../../../components/paymentMethod/hooks/usePaymentMethodCartContext';
+import usePaymentMethodAppContext from '../../../../components/paymentMethod/hooks/usePaymentMethodAppContext';
 
 function PaypalExpress({ method, selected, actions }) {
   const methodCode = _get(method, 'code');
-  const {
-    authorizeUser,
-    placePaypalExpressOrder,
-    processPaymentEnable,
-  } = usePaypalExpress({ paymentMethodCode: methodCode });
-  const {
-    setPaymentMethod,
-    selectedPaymentMethod,
-  } = usePaymentMethodCartContext();
+  const { authorizeUser, placePaypalExpressOrder, processPaymentEnable } =
+    usePaypalExpress({ paymentMethodCode: methodCode });
+  const { setPaymentMethod, selectedPaymentMethod } =
+    usePaymentMethodCartContext();
   const { setPageLoader } = usePaymentMethodAppContext();
   const { registerPaymentAction } = useCheckoutFormContext();
   const isSelected = methodCode === selected.code;
-
   useEffect(() => {
-      registerPaymentAction(methodCode, authorizeUser);
+    registerPaymentAction(methodCode, authorizeUser);
   }, [authorizeUser, registerPaymentAction, methodCode]);
-
   useEffect(() => {
     if (processPaymentEnable) {
       placePaypalExpressOrder();
     }
   }, [placePaypalExpressOrder, processPaymentEnable]);
-
   useEffect(() => {
-   if (isSelected && selectedPaymentMethod.code !== methodCode) {
-    (async () => {
-      setPageLoader(true);
-      await setPaymentMethod(methodCode);
-      setPageLoader(false);
-     })();
-   }
+    if (isSelected && selectedPaymentMethod.code !== methodCode) {
+      (async () => {
+        setPageLoader(true);
+        await setPaymentMethod(methodCode);
+        setPageLoader(false);
+      })();
+    }
   }, [
     isSelected,
     setPaymentMethod,
@@ -72,6 +64,10 @@ PaypalExpress.propTypes = {
   method: methodShape.isRequired,
   selected: methodShape.isRequired,
   actions: shape({ change: func }),
+};
+
+PaypalExpress.defaultProps = {
+  actions: null,
 };
 
 export default PaypalExpress;

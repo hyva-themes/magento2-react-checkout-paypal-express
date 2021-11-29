@@ -35,13 +35,13 @@ export default function sendRequest(
     headers,
     ...body,
   })
-    .then(response => {
+    .then((response) => {
       if (response.ok && responseType === RESPONSE_TEXT) {
         return response.text();
       }
       return response.json();
     })
-    .catch(exception => {
+    .catch((exception) => {
       console.error(exception);
       throw exception;
     });

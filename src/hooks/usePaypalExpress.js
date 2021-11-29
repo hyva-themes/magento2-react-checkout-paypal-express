@@ -6,12 +6,12 @@ import usePaypalExpressCartContext from './usePaypalExpressCartContext';
 import createCustomerToken from '../api/createCustomerToken';
 import setPaymentMethodPaypalExpress from '../api/setPaymentMethod';
 import { placeOrderRequest } from '../../../../api';
-import { performRedirect } from '../../../payone/src/utility';
-
+import { config } from '../../../../config';
+import LocalStorage from '../../../../utils/localStorage';
 /*
  Utility to get the token and the payer id from the URL
  */
-const getTokenPayerId = query => {
+const getTokenPayerId = (query) => {
   const params = new URLSearchParams(query);
   return { token: params.get('token'), payerId: params.get('PayerID') };
 };
@@ -28,7 +28,7 @@ export default function usePaypalExpress({ paymentMethodCode }) {
   const query = window.location.search;
   const selectedShippingMethodCode = _get(selectedShippingMethod, 'methodCode');
   const selectedPaymentMethodCode = _get(selectedPaymentMethod, 'code');
-  
+
   /*
    Check if is possible to proceed on placing the order.
    */
@@ -77,7 +77,8 @@ export default function usePaypalExpress({ paymentMethodCode }) {
       const response = await placeOrderRequest();
 
       if (response && response.order_number) {
-        performRedirect(response);
+        window.location.replace(`${config.baseUrl}/checkout/onepage/success/`);
+        LocalStorage.clearCheckoutStorage();
       } else {
         setPageLoader(false);
         if (response.errors[0]?.message) {

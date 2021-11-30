@@ -48,7 +48,6 @@ export default function usePaypalExpress({ paymentMethodCode }) {
   ]);
 
   const placePaypalExpressOrder = useCallback(async () => {
-    // setProcessPaymentEnable(false);
     /*
      Get paypal express required data from response query
      */
@@ -118,8 +117,8 @@ export default function usePaypalExpress({ paymentMethodCode }) {
 
     setPageLoader(true);
     const response = await createCustomerToken({
-      returnUrl: `checkout/index/index`,
-      cancelUrl: `checkout/index/index`,
+      returnUrl: `hyva/checkout`,
+      cancelUrl: `hyva/checkout`,
       paymentCode: paymentMethodCode,
     });
 

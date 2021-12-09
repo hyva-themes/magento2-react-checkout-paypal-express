@@ -117,8 +117,8 @@ export default function usePaypalExpress({ paymentMethodCode }) {
 
     setPageLoader(true);
     const response = await createCustomerToken({
-      returnUrl: `hyva/checkout`,
-      cancelUrl: `hyva/checkout`,
+      returnUrl: `checkout/index/index`,
+      cancelUrl: `checkout/index/index`,
       paymentCode: paymentMethodCode,
     });
 

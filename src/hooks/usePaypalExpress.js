@@ -24,7 +24,8 @@ export default function usePaypalExpress({ paymentMethodCode }) {
     selectedShippingMethod,
     selectedPaymentMethod,
   } = usePaypalExpressCartContext();
-  const { setErrorMessage, setPageLoader } = usePaypalExpressAppContext();
+  const { appDispatch, setErrorMessage, setPageLoader } =
+    usePaypalExpressAppContext();
   const query = window.location.search;
   const selectedShippingMethodCode = _get(selectedShippingMethod, 'methodCode');
   const selectedPaymentMethodCode = _get(selectedPaymentMethod, 'code');
@@ -68,7 +69,7 @@ export default function usePaypalExpress({ paymentMethodCode }) {
      */
     try {
       setPageLoader(true);
-      await setPaymentMethodPaypalExpress({
+      await setPaymentMethodPaypalExpress(appDispatch, {
         payerId,
         token,
         paymentCode: paymentMethodCode,
@@ -116,9 +117,9 @@ export default function usePaypalExpress({ paymentMethodCode }) {
     }
 
     setPageLoader(true);
-    const response = await createCustomerToken({
-      returnUrl: `hyva/checkout`,
-      cancelUrl: `hyva/checkout`,
+    const response = await createCustomerToken(appDispatch, {
+      returnUrl: `checkout/index/index`,
+      cancelUrl: `checkout/index/index`,
       paymentCode: paymentMethodCode,
     });
 

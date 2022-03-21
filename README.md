@@ -43,3 +43,5 @@ Finally, we need to build the app again. For this, you need to run `npm run buil
 BSD 3-Clause License. Please see [License File](LICENSE.txt) for more information.
 
 [link-contributors]: ../../contributors
+
+[![webvisum GmbH](https://webvisum.de/media/logo/websites/1/logo.png)](https://webvisum.de)

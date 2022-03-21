@@ -40,8 +40,9 @@ Special thanks to Webvisum for building the initial release of this Paypal integ
 
 # [![webvisum GmbH](https://webvisum.de/media/logo/websites/1/logo.png)](https://webvisum.de)
 
-- [Andreas Mautz][link-author]
+- [Ilan Ariel Baron][link-author]
 - [Irene Iaccio][link-author2]
+- [Andreas Mautz][link-author3]
 - [WebVisum][link-company1]
 - [All Contributors][link-contributors]
 
@@ -49,8 +50,10 @@ Special thanks to Webvisum for building the initial release of this Paypal integ
 
 BSD 3-Clause License. Please see [License File](LICENSE.txt) for more information.
 
-[link-author]: https://github.com/mautz-et-tong
+[link-author]: https://github.com/ilanarielbaron
 [link-author2]: https://github.com/nuovecode
+[link-author3]: https://github.com/mautz-et-tong
+
 [link-company1]: https://webvisum.de
 [link-contributors]: ../../contributors
 

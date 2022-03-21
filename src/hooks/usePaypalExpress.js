@@ -1,18 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import _get from 'lodash.get';
-
 import { __ } from '../../../../i18n';
-import { config } from '../../../../config';
-import LocalStorage from '../../../../utils/localStorage';
 import usePaypalExpressAppContext from './usePaypalExpressAppContext';
 import usePaypalExpressCartContext from './usePaypalExpressCartContext';
 import createCustomerToken from '../api/createCustomerToken';
 import setPaymentMethodPaypalExpress from '../api/setPaymentMethod';
-
+import { placeOrderRequest } from '../../../../api';
+import { config } from '../../../../config';
+import LocalStorage from '../../../../utils/localStorage';
 /*
  Utility to get the token and the payer id from the URL
  */
-const getTokenPayerId = query => {
+const getTokenPayerId = (query) => {
   const params = new URLSearchParams(query);
   return { token: params.get('token'), payerId: params.get('PayerID') };
 };
@@ -24,9 +23,9 @@ export default function usePaypalExpress({ paymentMethodCode }) {
     hasCartBillingAddress,
     selectedShippingMethod,
     selectedPaymentMethod,
-    placeOrder,
   } = usePaypalExpressCartContext();
-  const { setErrorMessage, setPageLoader } = usePaypalExpressAppContext();
+  const { appDispatch, setErrorMessage, setPageLoader } =
+    usePaypalExpressAppContext();
   const query = window.location.search;
   const selectedShippingMethodCode = _get(selectedShippingMethod, 'methodCode');
   const selectedPaymentMethodCode = _get(selectedPaymentMethod, 'code');
@@ -50,7 +49,6 @@ export default function usePaypalExpress({ paymentMethodCode }) {
   ]);
 
   const placePaypalExpressOrder = useCallback(async () => {
-    // setProcessPaymentEnable(false);
     /*
      Get paypal express required data from response query
      */
@@ -71,23 +69,27 @@ export default function usePaypalExpress({ paymentMethodCode }) {
      */
     try {
       setPageLoader(true);
-      await setPaymentMethodPaypalExpress({
+      await setPaymentMethodPaypalExpress(appDispatch, {
         payerId,
         token,
         paymentCode: paymentMethodCode,
       });
-      const response = await placeOrder();
+      const response = await placeOrderRequest();
 
       if (response && response.order_number) {
-        LocalStorage.clearCheckoutStorage();
         window.location.replace(`${config.baseUrl}/checkout/onepage/success/`);
+        LocalStorage.clearCheckoutStorage();
       } else {
         setPageLoader(false);
-        setErrorMessage(
-          __(
-            'Something went wrong while adding the payment method to the quote.'
-          )
-        );
+        if (response.errors[0]?.message) {
+          setErrorMessage(__(response.errors[0]?.message));
+        } else {
+          setErrorMessage(
+            __(
+              'Something went wrong while adding the payment method to the quote.'
+            )
+          );
+        }
       }
     } catch (error) {
       setPageLoader(false);
@@ -97,7 +99,6 @@ export default function usePaypalExpress({ paymentMethodCode }) {
     }
   }, [
     paymentMethodCode,
-    placeOrder,
     cartId,
     query,
     selectedShippingMethod,
@@ -116,7 +117,7 @@ export default function usePaypalExpress({ paymentMethodCode }) {
     }
 
     setPageLoader(true);
-    const response = await createCustomerToken({
+    const response = await createCustomerToken(appDispatch, {
       returnUrl: `checkout/index/index`,
       cancelUrl: `checkout/index/index`,
       paymentCode: paymentMethodCode,

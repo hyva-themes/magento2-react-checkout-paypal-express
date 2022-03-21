@@ -27,9 +27,21 @@ With this code in `package.json` and running `npm install`, then you are all set
 
 Finally, we need to build the app again. For this, you need to run `npm run build` from the root directory of Hyvä Checkout react app (`src/reactapp`). After this, if you navigate to the checkout page from your site, then you will see the paypal express payment option you have configured in the above step.
 
-## More Reading
+## Documentation
 
 - If you have any doubts about the building the react app, then **[read more about it here](https://hyva-themes.github.io/magento2-hyva-checkout/build/)**.
 - If you want to know more about how Hyvä Checkout helps you to integrate any payment methods, then **[read more about it here](https://hyva-themes.github.io/magento2-hyva-checkout/payment-integration/)**.
 - The official documentation of **[Hyvä Checkout](https://hyva-themes.github.io/magento2-hyva-checkout)**
 - The Magento documentation of **[Paypal Express](https://docs.magento.com/user-guide/payment/paypal-express-checkout.html)**
+
+## Credits
+
+- [All Contributors][link-contributors]
+
+## License
+
+BSD 3-Clause License. Please see [License File](LICENSE.txt) for more information.
+
+[link-contributors]: ../../contributors
+
+[![webvisum GmbH](https://webvisum.de/media/logo/websites/1/logo.png)](https://webvisum.de)

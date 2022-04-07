@@ -8,10 +8,10 @@ Paypal Express payment method for Hyvä React Checkout
 
 ## Prerequisites
 
-1. **[Hyvä Checkout](https://github.com/hyva-themes/magento2-hyva-checkout)** is installed and setup.
+1. **[React Checkout](https://github.com/hyva-themes/magento2-react-checkout)** is installed and setup.
 2. Paypal express is configured in the Magento 2 store backend under `Stores > Configuration > Sales > Payment Methods > Paypal Express Checkout`.
 
-## How to use it with Hyvä Checkout?
+## How to use it with Hyvä React Checkout?
 Add below code in your `package.json`.
 
 File: `src/reactapp/package.json`
@@ -29,9 +29,9 @@ Finally, we need to build the app again. For this, you need to run `npm run buil
 
 ## Documentation
 
-- If you need information on the build process of the React Checkout, then you can **[read more about it here](https://hyva-themes.github.io/magento2-hyva-checkout/build/)**.
-- If you want to know more about how Hyvä Checkout helps you to integrate any payment methods, then **[read more about it here](https://hyva-themes.github.io/magento2-hyva-checkout/payment-integration/)**.
-- The official documentation of **[Hyvä React Checkout](https://hyva-themes.github.io/magento2-hyva-checkout)**
+- If you need information on the build process of the React Checkout, then you can **[read more about it here](https://hyva-themes.github.io/magento2-react-checkout/build/)**.
+- If you want to know more about how Hyvä Checkout helps you to integrate any payment methods, then **[read more about it here](https://hyva-themes.github.io/magento2-react-checkout/payment-integration/)**.
+- The official documentation of **[Hyvä React Checkout](https://hyva-themes.github.io/magento2-react-checkout)**
 - The Magento documentation of **[Paypal Express](https://docs.magento.com/user-guide/payment/paypal-express-checkout.html)**
 
 ## Credits

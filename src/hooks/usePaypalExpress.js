@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import _get from 'lodash.get';
-import { __ } from '../../../../i18n';
-import usePaypalExpressAppContext from './usePaypalExpressAppContext';
-import usePaypalExpressCartContext from './usePaypalExpressCartContext';
+
+import { __ } from '@hyva/react-checkout/i18n';
+import { config } from '@hyva/react-checkout/config';
+import { placeOrderRequest } from '@hyva/react-checkout/api';
+import LocalStorage from '@hyva/react-checkout/utils/localStorage';
+
 import createCustomerToken from '../api/createCustomerToken';
 import setPaymentMethodPaypalExpress from '../api/setPaymentMethod';
-import { placeOrderRequest } from '../../../../api';
-import { config } from '../../../../config';
-import LocalStorage from '../../../../utils/localStorage';
+import usePaypalExpressAppContext from './usePaypalExpressAppContext';
+import usePaypalExpressCartContext from './usePaypalExpressCartContext';
 /*
  Utility to get the token and the payer id from the URL
  */
@@ -27,8 +28,8 @@ export default function usePaypalExpress({ paymentMethodCode }) {
   const { appDispatch, setErrorMessage, setPageLoader } =
     usePaypalExpressAppContext();
   const query = window.location.search;
-  const selectedShippingMethodCode = _get(selectedShippingMethod, 'methodCode');
-  const selectedPaymentMethodCode = _get(selectedPaymentMethod, 'code');
+  const selectedPaymentMethodCode = selectedPaymentMethod?.code;
+  const selectedShippingMethodCode = selectedShippingMethod?.methodCode;
 
   /*
    Check if is possible to proceed on placing the order.
@@ -41,11 +42,11 @@ export default function usePaypalExpress({ paymentMethodCode }) {
     )
       setProcessPaymentEnable(true);
   }, [
-    paymentMethodCode,
     query,
+    paymentMethodCode,
     setProcessPaymentEnable,
-    selectedShippingMethodCode,
     selectedPaymentMethodCode,
+    selectedShippingMethodCode,
   ]);
 
   const placePaypalExpressOrder = useCallback(async () => {
@@ -79,32 +80,31 @@ export default function usePaypalExpress({ paymentMethodCode }) {
       if (response && response.order_number) {
         window.location.replace(`${config.baseUrl}/checkout/onepage/success/`);
         LocalStorage.clearCheckoutStorage();
+      } else if (response.errors[0]?.message) {
+        setErrorMessage(__(response.errors[0]?.message));
       } else {
-        setPageLoader(false);
-        if (response.errors[0]?.message) {
-          setErrorMessage(__(response.errors[0]?.message));
-        } else {
-          setErrorMessage(
-            __(
-              'Something went wrong while adding the payment method to the quote.'
-            )
-          );
-        }
+        setErrorMessage(
+          __(
+            'Something went wrong while adding the payment method to the quote.'
+          )
+        );
       }
     } catch (error) {
-      setPageLoader(false);
       setErrorMessage(
         __('Something went wrong while adding the payment method to the quote.')
       );
+    } finally {
+      setPageLoader(false);
     }
   }, [
-    paymentMethodCode,
-    cartId,
     query,
-    selectedShippingMethod,
-    setErrorMessage,
+    cartId,
+    appDispatch,
     setPageLoader,
+    setErrorMessage,
+    paymentMethodCode,
     hasCartBillingAddress,
+    selectedShippingMethod,
   ]);
 
   /*
@@ -124,10 +124,9 @@ export default function usePaypalExpress({ paymentMethodCode }) {
     });
 
     if (response) {
-      const paypalExpressUrl = _get(
-        response,
-        'createPaypalExpressToken.paypal_urls.start'
-      );
+      const paypalExpressUrl =
+        response?.createPaypalExpressToken?.paypal_urls?.start;
+
       if (!paypalExpressUrl) {
         setErrorMessage(__('Paypal Error'));
         return;
@@ -136,16 +135,17 @@ export default function usePaypalExpress({ paymentMethodCode }) {
       window.location.href = paypalExpressUrl;
     }
   }, [
-    paymentMethodCode,
-    selectedShippingMethodCode,
-    setErrorMessage,
+    appDispatch,
     setPageLoader,
+    setErrorMessage,
+    paymentMethodCode,
     hasCartBillingAddress,
+    selectedShippingMethodCode,
   ]);
 
   return {
     authorizeUser,
-    placePaypalExpressOrder,
     processPaymentEnable,
+    placePaypalExpressOrder,
   };
 }

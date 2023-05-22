@@ -27,6 +27,23 @@ With this code in `package.json` and running `npm install`, then you are all set
 
 Finally, we need to build the app again. For this, you need to run `npm run build` from the root directory of Hyvä Checkout react app (`src/reactapp`). After this, if you navigate to the checkout page from your site, then you will see the paypal express payment option you have configured in the above step.
 
+## Translations
+Payment method related translations are available under `i18n` directory. You need to copy them and include it in the checkout module in order to make them part of the Magento translation process. Along with this, these translations needs to be added via layout xml as well.
+
+File: `view/frontend/layout/hyvareactcheckout_reactcheckout_index.xml`
+
+```
+<referenceBlock name="checkout.translations">
+    <arguments>
+        <argument name="checkout_translations" xsi:type="array">
+            <item name="hyva_react_checkout_paypal" xsi:type="string">
+                <![CDATA[Please agree to the terms and conditions first before placing the order again.,Something went wrong while adding the payment method to the quote.,Please complete all the required data.,Paypal Error]]>
+            </item>
+        </argument>
+    </arguments>
+        </referenceBlock>
+```
+
 ## Documentation
 
 - If you need information on the build process of the React Checkout, then you can **[read more about it here](https://hyva-themes.github.io/magento2-react-checkout/build/)**.
@@ -56,5 +73,3 @@ BSD 3-Clause License. Please see [License File](LICENSE.txt) for more informatio
 
 [link-company1]: https://webvisum.de
 [link-contributors]: ../../contributors
-
-

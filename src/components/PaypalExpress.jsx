@@ -1,29 +1,33 @@
-import { func, shape, string } from 'prop-types';
 import React, { useEffect } from 'react';
-import _get from 'lodash.get';
-import RadioInput from '../../../../components/common/Form/RadioInput';
+import { func, shape, string } from 'prop-types';
+
+import RadioInput from '@hyva/react-checkout/components/common/Form/RadioInput';
+import useCheckoutFormContext from '@hyva/react-checkout/hook/useCheckoutFormContext';
+import usePaymentMethodAppContext from '@hyva/react-checkout/components/paymentMethod/hooks/usePaymentMethodAppContext';
+import usePaymentMethodCartContext from '@hyva/react-checkout/components/paymentMethod/hooks/usePaymentMethodCartContext';
+
 import usePaypalExpress from '../hooks/usePaypalExpress';
-import useCheckoutFormContext from '../../../../hook/useCheckoutFormContext';
-import usePaymentMethodCartContext from '../../../../components/paymentMethod/hooks/usePaymentMethodCartContext';
-import usePaymentMethodAppContext from '../../../../components/paymentMethod/hooks/usePaymentMethodAppContext';
 
 function PaypalExpress({ method, selected, actions }) {
-  const methodCode = _get(method, 'code');
-  const { authorizeUser, placePaypalExpressOrder, processPaymentEnable } =
-    usePaypalExpress({ paymentMethodCode: methodCode });
-  const { setPaymentMethod, selectedPaymentMethod } =
-    usePaymentMethodCartContext();
+  const methodCode = method?.code;
   const { setPageLoader } = usePaymentMethodAppContext();
   const { registerPaymentAction } = useCheckoutFormContext();
+  const { setPaymentMethod, selectedPaymentMethod } =
+    usePaymentMethodCartContext();
+  const { authorizeUser, placePaypalExpressOrder, processPaymentEnable } =
+    usePaypalExpress({ paymentMethodCode: methodCode });
   const isSelected = methodCode === selected.code;
+
   useEffect(() => {
     registerPaymentAction(methodCode, authorizeUser);
   }, [authorizeUser, registerPaymentAction, methodCode]);
+
   useEffect(() => {
     if (processPaymentEnable) {
       placePaypalExpressOrder();
     }
   }, [placePaypalExpressOrder, processPaymentEnable]);
+
   useEffect(() => {
     if (isSelected && selectedPaymentMethod.code !== methodCode) {
       (async () => {
@@ -34,21 +38,21 @@ function PaypalExpress({ method, selected, actions }) {
     }
   }, [
     isSelected,
-    setPaymentMethod,
     methodCode,
-    selectedPaymentMethod,
     setPageLoader,
+    setPaymentMethod,
+    selectedPaymentMethod,
   ]);
 
   return (
     <div className="w-full">
       <div>
         <RadioInput
-          label={_get(method, 'title')}
+          value={methodCode}
           name="paymentMethod"
-          value={_get(method, 'code')}
-          onChange={actions.change}
           checked={isSelected}
+          label={method?.title}
+          onChange={actions.change}
         />
       </div>
     </div>
@@ -56,8 +60,8 @@ function PaypalExpress({ method, selected, actions }) {
 }
 
 const methodShape = shape({
-  title: string.isRequired,
   code: string.isRequired,
+  title: string.isRequired,
 });
 
 PaypalExpress.propTypes = {

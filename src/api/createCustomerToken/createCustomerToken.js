@@ -1,7 +1,8 @@
-import { CREATE_PAYPAL_EXPRESS_TOKEN } from './mutation';
-import LocalStorage from '../../../../../utils/localStorage';
+import sendRequest from '@hyva/react-checkout/api/sendRequest';
+import LocalStorage from '@hyva/react-checkout/utils/localStorage';
+
 import modifier from './modifier';
-import sendRequest from '../../../../../api/sendRequest';
+import { CREATE_PAYPAL_EXPRESS_TOKEN } from './mutation';
 
 export default async function createCustomerToken(
   appDispatch,

@@ -1,7 +1,8 @@
-import { SET_PAYMENT_METHOD_ON_CART_PAYPAL_EXPRESS } from './mutation';
-import sendRequest from '../../../../../api/sendRequest';
-import LocalStorage from '../../../../../utils/localStorage';
+import sendRequest from '@hyva/react-checkout/api/sendRequest';
+import LocalStorage from '@hyva/react-checkout/utils/localStorage';
+
 import modifier from './modifier';
+import { SET_PAYMENT_METHOD_ON_CART_PAYPAL_EXPRESS } from './mutation';
 
 export default async function setPaymentMethodPaypalExpress(
   appDispatch,
